@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "arcasyaai": {
+      "url": "https://secure.arcasya.ai/api/mcp/mcp",
+      "headers": {
+        "Authorization": "Bearer ${ARCASYA_API_KEY}"
+      }
+    }
+  }
+}
