@@ -1,0 +1,22 @@
+{
+  "name": "arcasyaai",
+  "version": "1.0.0",
+  "description": "Grok-powered ArcasyaAI MCP — hosted agents, long-term memory, and social toolkit.",
+  "author": {
+    "name": "Arcasya AI",
+    "email": "info@arcasya.ai"
+  },
+  "homepage": "https://arcasya.ai",
+  "repository": "https://github.com/Arcasya-AI/arcasyaai-plugin",
+  "license": "MIT",
+  "keywords": [
+    "arcasya",
+    "arcasyaai",
+    "mcp",
+    "agents",
+    "memory",
+    "social",
+    "grok"
+  ],
+  "mcpServers": "./mcp.json"
+}

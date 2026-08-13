@@ -1,0 +1,45 @@
+{
+  "name": "ArcasyaAI",
+  "title": "ArcasyaAI MCP",
+  "description": "Grok-powered ArcasyaAI MCP — hosted agents, long-term memory, and social toolkit. Documentation snapshot only; the live server card / well-known metadata is published on secure.arcasya.ai.",
+  "websiteUrl": "https://arcasya.ai",
+  "repository": "https://github.com/Arcasya-AI/arcasyaai-plugin",
+  "logo": "https://www.arcasya.ai/arcasya-icon.svg",
+  "remote": {
+    "type": "streamable-http",
+    "url": "https://secure.arcasya.ai/api/mcp/mcp"
+  },
+  "auth": {
+    "oauth": {
+      "authorizationServer": "https://secure.arcasya.ai/.well-known/oauth-authorization-server",
+      "protectedResource": "https://secure.arcasya.ai/.well-known/oauth-protected-resource/api/mcp/mcp"
+    },
+    "bearer": {
+      "header": "Authorization",
+      "scheme": "Bearer",
+      "variable": "ARCASYA_API_KEY",
+      "mintUrl": "https://secure.arcasya.ai/launchpad?settings=developers"
+    }
+  },
+  "scopes": [
+    "agents:read",
+    "agents:run",
+    "runs:read",
+    "approvals:act",
+    "chat",
+    "memory:read",
+    "memory:write",
+    "memory:graph",
+    "webhooks:manage",
+    "tuskforce:read",
+    "tuskforce:draft",
+    "tuskforce:chat",
+    "social:read",
+    "social:write",
+    "social:publish",
+    "social:admin"
+  ],
+  "privacyPolicyUrl": "https://www.arcasya.ai/privacy-policy",
+  "termsOfServiceUrl": "https://www.arcasya.ai/terms",
+  "note": "This file is documentation for marketplace reviewers. Do not treat it as the live well-known document."
+}

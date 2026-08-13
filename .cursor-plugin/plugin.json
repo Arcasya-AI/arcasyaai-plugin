@@ -1,0 +1,35 @@
+{
+  "name": "arcasyaai",
+  "displayName": "ArcasyaAI",
+  "version": "1.0.0",
+  "description": "Grok-powered ArcasyaAI MCP — hosted agents, long-term memory, and social toolkit. Connects to the live ArcasyaAI MCP; this package is a listing wrapper, not product source.",
+  "author": {
+    "name": "Arcasya AI",
+    "email": "info@arcasya.ai"
+  },
+  "homepage": "https://arcasya.ai",
+  "repository": "https://github.com/Arcasya-AI/arcasyaai-plugin",
+  "license": "MIT",
+  "keywords": [
+    "arcasya",
+    "arcasyaai",
+    "mcp",
+    "agents",
+    "memory",
+    "social",
+    "grok",
+    "oauth"
+  ],
+  "logo": "assets/logo.svg",
+  "mcpServers": "mcp.json",
+  "variables": {
+    "type": "object",
+    "properties": {
+      "ARCASYA_API_KEY": {
+        "type": "string",
+        "title": "ArcasyaAI API key",
+        "description": "Optional Bearer token for clients that do not use OAuth. Leave empty to connect with the hosted OAuth card. Mint a scoped key in Launchpad → Developers. Never commit the value into this repo."
+      }
+    }
+  }
+}
