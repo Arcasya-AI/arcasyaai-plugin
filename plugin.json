@@ -1,7 +1,7 @@
 {
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "arcasyaai",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Grok-powered ArcasyaAI MCP — hosted agents, long-term memory, and social toolkit. Connects to the live ArcasyaAI MCP; this package is a listing wrapper, not product source.",
   "author": {
     "name": "Arcasya AI",

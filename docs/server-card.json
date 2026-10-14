@@ -15,31 +15,41 @@
       "protectedResource": "https://secure.arcasya.ai/.well-known/oauth-protected-resource/api/mcp/mcp"
     },
     "bearer": {
+      "advanced": true,
       "header": "Authorization",
       "scheme": "Bearer",
       "variable": "ARCASYA_API_KEY",
-      "mintUrl": "https://secure.arcasya.ai/launchpad?settings=developers"
+      "mintUrl": "https://secure.arcasya.ai/launchpad?settings=developers",
+      "note": "Advanced, for clients that cannot complete OAuth. Grok Bot and the Cursor marketplace listing are OAuth only. This is not a Cursor plugin setting. See docs/mcp.api-key.example.json."
     }
   },
-  "scopes": [
+  "publicDefaultScopes": [
     "agents:read",
     "agents:run",
     "runs:read",
-    "approvals:act",
     "chat",
     "memory:read",
     "memory:write",
-    "memory:graph",
-    "webhooks:manage",
-    "tuskforce:read",
-    "tuskforce:draft",
-    "tuskforce:chat",
+    "approvals:act",
     "social:read",
-    "social:write",
-    "social:publish",
-    "social:admin"
+    "crm:read"
+  ],
+  "internalOnlyScopes": {
+    "admin": ["crm:admin", "social:admin"],
+    "whiteLabel": ["tuskforce:read", "tuskforce:draft", "tuskforce:chat"],
+    "note": "Internal only. Not granted to public clients. The hosted server hides the tools behind these scopes from public users."
+  },
+  "publicTools": [
+    "chat",
+    "ask_<persona>",
+    "agents/runs",
+    "memory",
+    "approvals",
+    "contacts",
+    "crm (read-only)",
+    "social (read-only)"
   ],
   "privacyPolicyUrl": "https://www.arcasya.ai/privacy-policy",
   "termsOfServiceUrl": "https://www.arcasya.ai/terms",
-  "note": "This file is documentation for marketplace reviewers. Do not treat it as the live well-known document."
+  "note": "Documentation snapshot for marketplace reviewers, aligned with arcasyaai-v3 PR #219. The live authorization server still advertises the full scopes_supported list. A new public client that omits scope receives publicDefaultScopes only. If the live metadata and this snapshot disagree, the hosted files win."
 }
