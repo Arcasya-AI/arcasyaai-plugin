@@ -30,6 +30,8 @@
     "chat",
     "memory:read",
     "memory:write",
+    "matrix:read",
+    "matrix:write",
     "approvals:act",
     "social:read",
     "crm:read"
@@ -44,6 +46,7 @@
     "ask_<persona>",
     "agents/runs",
     "memory",
+    "matrix (overview, search, node, traverse, table, write, update, link)",
     "approvals",
     "contacts",
     "crm (read-only)",
@@ -51,5 +54,14 @@
   ],
   "privacyPolicyUrl": "https://www.arcasya.ai/privacy-policy",
   "termsOfServiceUrl": "https://www.arcasya.ai/terms",
-  "note": "Documentation snapshot for marketplace reviewers, aligned with arcasyaai-v3 PR #219. The live authorization server still advertises the full scopes_supported list. A new public client that omits scope receives publicDefaultScopes only. If the live metadata and this snapshot disagree, the hosted files win."
+  "mcpApps": {
+    "extension": "io.modelcontextprotocol/ui",
+    "resources": [
+      "ui://arcasya/matrix-explorer.html",
+      "ui://arcasya/approval-card.html",
+      "ui://arcasya/run-status.html"
+    ],
+    "note": "Optional cards. Tools still return text and structured content when the host does not render ui://."
+  },
+  "note": "Documentation snapshot for marketplace reviewers. Public matrix tools land with arcasyaai-v3 matrix V1. The live authorization server still advertises the full scopes_supported list. A new public client that omits scope receives publicDefaultScopes only. If the live metadata and this snapshot disagree, the hosted files win."
 }

@@ -107,6 +107,8 @@ Default public scopes:
 | `chat` | Chat with the master agent, and `ask_<persona>` |
 | `memory:read` | Search memory |
 | `memory:write` | Write or extract memories |
+| `matrix:read` | Intelligence Matrix overview, search, table, and graph |
+| `matrix:write` | Typed matrix context, links, and project hubs |
 | `approvals:act` | Approve or reject held steps |
 | `social:read` | Read social brands, posts, and reports |
 | `crm:read` | Read CRM clients, contacts, notes, and issues |
@@ -117,10 +119,15 @@ Public tools on that grant:
 - `ask_<persona>` (one tool per persona in the caller’s org, when `chat` is granted)
 - agents / runs
 - memory
+- Intelligence Matrix (`matrix_overview`, `matrix_search`, `matrix_get_node`, `matrix_traverse`, `matrix_list`, `matrix_write`, `matrix_update`, `matrix_link`)
 - approvals
 - contacts
 - read-only CRM
 - read-only social
+
+Matrix tools stay inside the connected org. Organization-scope writes land pending review. A new project hub is created only for an owner or admin.
+
+The same tools can render MCP App cards (`ui://arcasya/matrix-explorer.html`, `ui://arcasya/approval-card.html`, `ui://arcasya/run-status.html`) when the host supports `io.modelcontextprotocol/ui`. Hosts that do not still receive the normal text and structured tool result.
 
 Admin scopes and white-label scopes are **internal only**. They are not granted to public clients. The server also hides the tools behind them from public users, including when a token lists a broader scope set.
 
