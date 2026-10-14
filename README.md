@@ -32,11 +32,12 @@ If you need product source, you are in the wrong repository.
 2. Or clone this repo and load it locally from `~/.cursor/plugins/local/arcasyaai` (see [Cursor plugin docs](https://cursor.com/docs/plugins.md#test-plugins-locally)).
 3. Connect with the **OAuth card** when Cursor prompts. That is the one-click path.
 
-Optional: set `ARCASYA_API_KEY` under **Plugins → Configure** if your client cannot complete OAuth. The committed `mcp.json` is URL-only so marketplace OAuth is not blocked by an empty `Authorization` header.
+The committed `mcp.json` is URL-only so marketplace OAuth stays free of an empty `Authorization` header. Grok Bot connects with OAuth. The Cursor manifest has no API-key setting.
 
 ### Grok Bot / Grok Build
 
-- After this repo is public, open a catalog PR against [xai-org/plugin-marketplace](https://github.com/xai-org/plugin-marketplace) pinning a commit SHA of this repository.
+Grok Bot installs this plugin from the Cursor Marketplace. Submit the listing at [https://cursor.com/marketplace/publish](https://cursor.com/marketplace/publish), then connect with OAuth.
+
 - Inside Grok Build: `/marketplace` → install `arcasyaai`, or connect the hosted URL below.
 - Grok discovers MCP from `mcp.json` via `.grok-plugin/plugin.json`.
 
@@ -64,7 +65,9 @@ OAuth (preferred):
 }
 ```
 
-API key (optional, for clients without OAuth):
+#### Advanced: API key
+
+Advanced, for clients that cannot complete OAuth. Cursor and Grok Bot connect with OAuth. A copy lives at [`docs/mcp.api-key.example.json`](docs/mcp.api-key.example.json). Do not put a real key in git.
 
 ```json
 {
@@ -79,8 +82,6 @@ API key (optional, for clients without OAuth):
 }
 ```
 
-A copy of the API-key variant lives at [`docs/mcp.api-key.example.json`](docs/mcp.api-key.example.json). Do not put a real key in git.
-
 ## Authentication
 
 ### OAuth (one-click)
@@ -92,33 +93,53 @@ The hosted MCP advertises OAuth:
 
 Clients that support MCP OAuth should show a connect card. No secrets belong in this repo.
 
-### Mint an API key (optional Bearer)
+### Scopes and public tools
 
-1. Sign in to [Launchpad → Developers](https://secure.arcasya.ai/launchpad?settings=developers).
-2. Create a personal / org API key.
-3. Grant **only the scopes you need** (least privilege).
-4. Store the key in the client’s secret store or plugin variable `ARCASYA_API_KEY`. Never commit it.
+The hosted server hides internal tools from public users ([arcasyaai-v3#219](https://github.com/Arcasya-AI/arcasyaai-v3/pull/219)). A new public OAuth client that omits `scope` receives the default public scopes below. The live authorization server still advertises a broader `scopes_supported` list. Public clients receive the default grant.
 
-Published scopes (from the live authorization server):
+Default public scopes:
 
 | Scope | Typical use |
 | --- | --- |
 | `agents:read` | List installed agents |
 | `agents:run` | Dispatch an agent |
 | `runs:read` | Poll run status |
-| `approvals:act` | Approve or reject held steps |
-| `chat` | Chat with the master agent |
-| `memory:read` | Search memory / contacts |
+| `chat` | Chat with the master agent, and `ask_<persona>` |
+| `memory:read` | Search memory |
 | `memory:write` | Write or extract memories |
-| `memory:graph` | Traverse the memory graph |
-| `webhooks:manage` | Manage webhooks |
-| `tuskforce:read` | Tuskforce read |
-| `tuskforce:draft` | Tuskforce draft |
-| `tuskforce:chat` | Tuskforce chat |
-| `social:read` | Social brands / posts (read) |
-| `social:write` | Social drafts and updates |
-| `social:publish` | Record that a human posted |
-| `social:admin` | Social admin (superset) |
+| `approvals:act` | Approve or reject held steps |
+| `social:read` | Read social brands, posts, and reports |
+| `crm:read` | Read CRM clients, contacts, notes, and issues |
+
+Public tools on that grant:
+
+- `chat`
+- `ask_<persona>` (one tool per persona in the caller’s org, when `chat` is granted)
+- agents / runs
+- memory
+- approvals
+- contacts
+- read-only CRM
+- read-only social
+
+Admin scopes and white-label scopes are **internal only**. They are not granted to public clients. The server also hides the tools behind them from public users, including when a token lists a broader scope set.
+
+| Scope | Why it is internal |
+| --- | --- |
+| `crm:admin` | Admin. Not granted to public clients. |
+| `social:admin` | Admin. Not granted to public clients. |
+| `tuskforce:read` | White-label. Not granted to public clients. |
+| `tuskforce:draft` | White-label. Not granted to public clients. |
+| `tuskforce:chat` | White-label. Not granted to public clients. |
+
+### Advanced: mint an API key
+
+Optional Bearer auth for clients without OAuth. Cursor and Grok Bot connect with OAuth and do not use this setting.
+
+1. Sign in to [Launchpad → Developers](https://secure.arcasya.ai/launchpad?settings=developers).
+2. Create a personal / org API key.
+3. Grant **only the scopes you need** (least privilege). Public clients should stay on the default public scopes above.
+4. Store the key in the client’s secret store. Never commit it.
 
 Send the key as `Authorization: Bearer <key>`.
 
@@ -126,25 +147,25 @@ Send the key as `Authorization: Bearer <key>`.
 
 ```text
 arcasyaai-plugin/
-├── .cursor-plugin/plugin.json   # Cursor Plugin (logo, variables, marketplace fields)
+├── .cursor-plugin/plugin.json   # Cursor Plugin (logo, marketplace fields). OAuth only.
 ├── .grok-plugin/plugin.json     # Grok Build catalog helper
 ├── plugin.json                  # Agent Plugins portable manifest
 ├── mcp.json                     # Hosted Streamable HTTP MCP (OAuth / URL-only)
 ├── assets/logo.svg              # Marketplace icon
 ├── assets/wordmark.svg          # Optional wordmark
-├── docs/                        # Server-card snapshot + API-key example
+├── docs/                        # Server-card snapshot + advanced API-key example
 ├── LICENSE                      # MIT
 └── README.md
 ```
 
-`mcp.json` is URL-only on purpose: Agent Plugins forbids secrets in headers, and an empty `Bearer ${ARCASYA_API_KEY}` header would break marketplace OAuth. Cursor still declares optional `ARCASYA_API_KEY` under plugin `variables`.
+`mcp.json` is URL-only on purpose: Agent Plugins forbids secrets in headers, and an empty `Bearer ${ARCASYA_API_KEY}` header would break marketplace OAuth. The Cursor manifest has no `ARCASYA_API_KEY` setting.
 
 ## Marketplace submission checklist
 
 Use this repo’s public URL: `https://github.com/Arcasya-AI/arcasyaai-plugin`
 
 - [ ] **Cursor:** [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish) — valid `.cursor-plugin/plugin.json`, committed `assets/logo.svg`, public repo, no secrets.
-- [ ] **Grok Bot / Grok Build:** PR to [xai-org/plugin-marketplace](https://github.com/xai-org/plugin-marketplace) adding a remote entry that pins a 40-character commit SHA of this repo. Then `python3 scripts/generate-plugin-index.py` and `python3 scripts/validate-catalog.py` in that catalog repo.
+- [ ] **Grok Bot:** Submit at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish). Grok Bot installs from the Cursor Marketplace and connects with OAuth.
 - [ ] **Claude directory:** [claude.ai/admin-settings/directory/submissions/new](https://claude.ai/admin-settings/directory/submissions/new) (Team/Enterprise + directory permission). MCP URL `https://secure.arcasya.ai/api/mcp/mcp`.
 - [ ] **OpenAI / ChatGPT plugins:** [developers.openai.com/plugins/deploy/submission](https://developers.openai.com/plugins/deploy/submission) — universal MCP URL, OAuth, privacy policy, logo.
 
