@@ -1,7 +1,7 @@
 {
   "name": "arcasyaai",
-  "version": "1.0.1",
-  "description": "Grok-powered ArcasyaAI MCP — hosted agents, long-term memory, and social toolkit.",
+  "version": "1.0.2",
+  "description": "Connect your ArcasyaAI workspace: Intelligence Matrix, hosted agents and runs, long-term memory, and approvals over OAuth, scoped to your own org. Listing wrapper for the hosted MCP; not product source.",
   "author": {
     "name": "Arcasya AI",
     "email": "info@arcasya.ai"
@@ -15,8 +15,9 @@
     "mcp",
     "agents",
     "memory",
-    "social",
-    "grok"
+    "grok",
+    "intelligence-matrix",
+    "approvals"
   ],
   "mcpServers": "./mcp.json"
 }
