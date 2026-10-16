@@ -38,8 +38,8 @@ The committed `mcp.json` is URL-only so marketplace OAuth stays free of an empty
 
 Grok Bot installs this plugin from the Cursor Marketplace. Submit the listing at [https://cursor.com/marketplace/publish](https://cursor.com/marketplace/publish), then connect with OAuth.
 
-- Inside Grok Build: `/marketplace` → install `arcasyaai`, or connect the hosted URL below.
-- Grok discovers MCP from `mcp.json` via `.grok-plugin/plugin.json`.
+- In Grok Bot: **Connect apps** → find **ArcasyaAI** → **Add** → complete OAuth. Then type `@ArcasyaAI` in chat to attach it.
+- Team admins control availability from the Cursor dashboard Plugins & MCPs page; Grok Bot inherits that policy.
 
 ### Claude
 
@@ -81,6 +81,16 @@ Advanced, for clients that cannot complete OAuth. Cursor and Grok Bot connect wi
   }
 }
 ```
+
+## Try it
+
+After connecting, ask:
+
+1. "Give me an overview of my Intelligence Matrix."
+2. "Search my matrix for <topic>, open the top node, and show what it links to."
+3. "List my agents" and "Show pending approvals."
+
+Every call stays inside the org you connected.
 
 ## Authentication
 
