@@ -31,6 +31,9 @@ If you need product source, you are in the wrong repository.
 1. Submit / install from [cursor.com/marketplace](https://cursor.com/marketplace) once the listing is published ([publish form](https://cursor.com/marketplace/publish)).
 2. Or clone this repo and load it locally from `~/.cursor/plugins/local/arcasyaai` (see [Cursor plugin docs](https://cursor.com/docs/plugins.md#test-plugins-locally)).
 3. Connect with the **OAuth card** when Cursor prompts. That is the one-click path.
+4. Type `@` to attach the connector and `/` to run a skill. The skill to hand work to Launchpad is `run-launchpad`.
+
+Local load, the install deeplink, and the still-open submit step: [docs/CURSOR.md](docs/CURSOR.md).
 
 The committed `mcp.json` is URL-only so marketplace OAuth stays free of an empty `Authorization` header. Grok Bot connects with OAuth. The Cursor manifest has no API-key setting.
 
@@ -40,6 +43,9 @@ Grok Bot installs this plugin from the Cursor Marketplace. Submit the listing at
 
 - Inside Grok Build: `/marketplace` → install `arcasyaai`, or connect the hosted URL below.
 - Grok discovers MCP from `mcp.json` via `.grok-plugin/plugin.json`.
+- After install, type `@` to attach the connector and `/` for a skill. Connectors are account-wide. Team allow and block is Dashboard → Plugins.
+
+Full notes: [docs/GROK-BOT.md](docs/GROK-BOT.md). Profile sync inside Launchpad is a different product and is not this plugin.
 
 ### Claude
 
@@ -50,6 +56,9 @@ Grok Bot installs this plugin from the Cursor Marketplace. Submit the listing at
 
 - Submit the hosted MCP URL through the [OpenAI plugin submission portal](https://developers.openai.com/plugins/deploy/submission) (Apps dashboard: [platform.openai.com/apps-manage](https://platform.openai.com/apps-manage/)).
 - Use the **universal** MCP URL above. Auth is OAuth 2.1 (PKCE) on `https://secure.arcasya.ai`.
+- If a host cannot speak MCP, the product ships a Custom GPT Actions schema as a fallback. Do not drop this MCP submission path.
+
+Cloud Agents attach the same URL with `type: http` (not the `streamable-http` value in `mcp.json`). See [docs/CLOUD-AGENTS.md](docs/CLOUD-AGENTS.md).
 
 ### Manual MCP URL (any client)
 
@@ -109,9 +118,10 @@ Default public scopes:
 | `memory:write` | Write or extract memories |
 | `matrix:read` | Intelligence Matrix overview, search, table, and graph |
 | `matrix:write` | Typed matrix context, links, and project hubs |
-| `approvals:act` | Approve or reject held steps |
 | `social:read` | Read social brands, posts, and reports |
 | `crm:read` | Read CRM clients, contacts, notes, and issues |
+
+`approvals:act` is not in that default. It is opt-in. An OAuth caller can reject a hold. It cannot approve one. A person approves in Launchpad. See [docs/SCOPES.md](docs/SCOPES.md).
 
 Public tools on that grant:
 
@@ -120,7 +130,6 @@ Public tools on that grant:
 - agents / runs
 - memory
 - Intelligence Matrix (`matrix_overview`, `matrix_search`, `matrix_get_node`, `matrix_traverse`, `matrix_list`, `matrix_write`, `matrix_update`, `matrix_link`)
-- approvals
 - contacts
 - read-only CRM
 - read-only social
@@ -143,10 +152,9 @@ Admin scopes and white-label scopes are **internal only**. They are not granted 
 
 Optional Bearer auth for clients without OAuth. Cursor and Grok Bot connect with OAuth and do not use this setting.
 
-1. Sign in to [Launchpad → Developers](https://secure.arcasya.ai/launchpad?settings=developers).
-2. Create a personal / org API key.
-3. Grant **only the scopes you need** (least privilege). Public clients should stay on the default public scopes above.
-4. Store the key in the client’s secret store. Never commit it.
+1. Sign in to [Launchpad → Connect](https://secure.arcasya.ai/launchpad/mcp). A key created there defaults to the public scopes above. The wide bundle is opt-in and listed.
+2. Grant **only the scopes you need** (least privilege).
+3. Store the key in the client’s secret store. Never commit it.
 
 Send the key as `Authorization: Bearer <key>`.
 
@@ -160,10 +168,16 @@ arcasyaai-plugin/
 ├── mcp.json                     # Hosted Streamable HTTP MCP (OAuth / URL-only)
 ├── assets/logo.svg              # Marketplace icon
 ├── assets/wordmark.svg          # Optional wordmark
-├── docs/                        # Server-card snapshot + advanced API-key example
+├── skills/run-launchpad/SKILL.md
+├── skills/launchpad-approvals/SKILL.md
+├── rules/arcasya-layer.mdc
+├── commands/ask-arcasya.md
+├── docs/                        # Grok Bot, Cursor, Cloud Agents, scopes
 ├── LICENSE                      # MIT
 └── README.md
 ```
+
+Scope lists, dated: [docs/SCOPES.md](docs/SCOPES.md). If that file and the live server disagree, the server wins.
 
 `mcp.json` is URL-only on purpose: Agent Plugins forbids secrets in headers, and an empty `Bearer ${ARCASYA_API_KEY}` header would break marketplace OAuth. The Cursor manifest has no `ARCASYA_API_KEY` setting.
 
@@ -171,10 +185,10 @@ arcasyaai-plugin/
 
 Use this repo’s public URL: `https://github.com/Arcasya-AI/arcasyaai-plugin`
 
-- [ ] **Cursor:** [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish) — valid `.cursor-plugin/plugin.json`, committed `assets/logo.svg`, public repo, no secrets.
-- [ ] **Grok Bot:** Submit at [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish). Grok Bot installs from the Cursor Marketplace and connects with OAuth.
+- [ ] **Cursor:** [cursor.com/marketplace/publish](https://cursor.com/marketplace/publish) — submit this repository. Package notes: [docs/CURSOR.md](docs/CURSOR.md). Valid `.cursor-plugin/plugin.json`, committed `assets/logo.svg`, public repo, no secrets.
+- [ ] **Grok Bot:** same Cursor listing. Install notes: [docs/GROK-BOT.md](docs/GROK-BOT.md).
 - [ ] **Claude directory:** [claude.ai/admin-settings/directory/submissions/new](https://claude.ai/admin-settings/directory/submissions/new) (Team/Enterprise + directory permission). MCP URL `https://secure.arcasya.ai/api/mcp/mcp`.
-- [ ] **OpenAI / ChatGPT plugins:** [developers.openai.com/plugins/deploy/submission](https://developers.openai.com/plugins/deploy/submission) — universal MCP URL, OAuth, privacy policy, logo.
+- [ ] **OpenAI / ChatGPT plugins:** [developers.openai.com/plugins/deploy/submission](https://developers.openai.com/plugins/deploy/submission) — universal MCP URL, OAuth, privacy policy, logo. Actions in the product is only the fallback.
 
 Privacy policy: [arcasya.ai/privacy-policy](https://www.arcasya.ai/privacy-policy)  
 Terms: [arcasya.ai/terms](https://www.arcasya.ai/terms)
